@@ -1,0 +1,41 @@
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: e8ea5a841fd865f045df0233853bdabad6f6af7eb1cdf853d4c1d508c480fd31
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 6a06e41512735e4b413625be9cebc2b4f548daff92d13f4b7c0557033dfe358d
+Description: A compression library
+Status: install ok installed
+
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 459ca9b974a95e3557656bb6efc37c34887260d57a4f41c27f869138fa0d5564
+Status: install ok installed
+
+Package: libpng
+Version: 1.6.50
+Depends: vcpkg-cmake, vcpkg-cmake-config, zlib
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 19d8c02c782c02a48318e08a84221fa7d9209984da8cc8d7e27c813241a36564
+Description: libpng is a library implementing an interface for reading and writing PNG (Portable Network Graphics) format files
+Status: install ok installed
+
+Package: sdl3
+Version: 3.2.22
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: e77babc747b6c1eb74a374190ee611dec25b9d9694656ee271d988a42d9ed41e
+Description: Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+Status: install ok installed
+

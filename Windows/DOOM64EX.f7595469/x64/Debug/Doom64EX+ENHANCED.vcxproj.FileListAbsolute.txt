@@ -1,0 +1,2 @@
+D:\DOOM64-EX-Plus-Enhanced\Windows\x64\Debug\SDL3.dll
+D:\DOOM64-EX-Plus-Enhanced\Windows\DOOM64EX.f7595469\x64\Debug\Doom64EX.E9F60E54.Up2Date
