@@ -714,7 +714,7 @@ static void InitSpriteTextures(void) {
 //
 // GL_BindSpriteTexture
 //
-void GL_BindSpriteTexture(int spritenum, int pal) {
+/*void GL_BindSpriteTexture(int spritenum, int pal) {
 	extern cvar_t r_spriteFilter;
 	byte* png;
 	int w, h;
@@ -818,7 +818,119 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	if (devparm)
 		glBindCalls++;
+}*/
+
+//
+// GL_BindSpriteTexture //Now with dumb scaling fix for bigger sprites
+//
+void GL_BindSpriteTexture(int spritenum, int pal) {
+	extern cvar_t r_spriteFilter;
+	byte* png;
+	int w, h;
+
+	if (r_fillmode.value <= 0)
+		return;
+
+	if (pal && pal >= spritecount[spritenum])
+		pal = 0;
+
+	if ((spritenum == cursprite) && (pal == curtrans)) {
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglEnable(GL_TEXTURE_2D);
+		dglEnable(GL_ALPHA_TEST);
+		dglAlphaFunc(GL_GREATER, 0.2f);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		dglDepthMask(GL_FALSE);
+		if (!game_world_shader_scope)
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
+		I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+		return;
+	}
+
+	cursprite = spritenum;
+	curtrans = pal;
+
+	if (spriteptr[spritenum][pal]) {
+		dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+		GL_SetState(GLSTATE_BLEND, 1);
+		dglEnable(GL_ALPHA_TEST);
+		dglAlphaFunc(GL_GREATER, 0.2f);
+		dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		dglDepthMask(GL_FALSE);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		if (!game_world_shader_scope)
+			GL_Env_RGB_Modulate_Alpha_FromTexture();
+		I_ShaderSetUseTexture(1);
+		I_ShaderSetTextureSize(spritewidth[spritenum], spriteheight[spritenum]);
+		I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+		if (game_world_shader_scope && !g_psprite_scope) {
+			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		}
+
+		if (devparm)
+			glBindCalls++;
+		return;
+	}
+
+	png = I_PNGReadData(s_start + spritenum, false, true, true, &w, &h, NULL, pal);
+
+	dglGenTextures(1, &spriteptr[spritenum][pal]);
+	dglBindTexture(GL_TEXTURE_2D, spriteptr[spritenum][pal]);
+	I_ShaderSetUseTexture(1);
+	if (game_world_shader_scope && !g_psprite_scope) {
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+
+	// Let's Store original dimensions
+	int orig_w = w;
+	int orig_h = h;
+
+	I_ShaderSetTextureSize(orig_w, orig_h);
+	I_SectorCombiner_Bind(1, orig_w, orig_h);
+
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	dglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	SetTextureImage(png, 4, &w, &h, GL_RGBA8, GL_RGBA);
+	Z_Free(png);
+
+	GL_SetState(GLSTATE_BLEND, 1);
+	dglEnable(GL_ALPHA_TEST);
+	dglAlphaFunc(GL_GREATER, 0.2f);
+	dglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	dglDepthMask(GL_FALSE);
+	if (!game_world_shader_scope)
+		GL_Env_RGB_Modulate_Alpha_FromTexture();
+
+	// Apply scaling to sprite dimensions for rendering
+	spritewidth[spritenum] = w;
+	spriteheight[spritenum] = h;
+
+	// We Scale down if needed - preserve original size in spritewidth/spriteheight 
+	if (orig_w >= 256 && orig_h >= 256) {
+		float spritescale = 0.15f; // Scale factor for large sprites that I'm using now [184x512] in size.
+		spritescaledef_t* sscale = &spritescale; 
+		spritewidth[spritenum] = (int)(orig_w * spritescale);
+		spriteheight[spritenum] = (int)(orig_h * spritescale);
+		spriteoffset[spritenum] = (int)(orig_w * spritescale);
+		spritetopoffset[spritenum] = (int)(orig_h * spritescale);
+
+		// Ensure we're not setting dimensions to 0 or negative
+		if (spritewidth[spritenum] <= 0) spritewidth[spritenum] = 1;
+		if (spriteheight[spritenum] <= 0) spriteheight[spritenum] = 1;
+	}
+
+	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+
+	if (devparm)
+		glBindCalls++;
 }
+
 
 //
 // GL_ScreenToTexture
@@ -1205,23 +1317,6 @@ int GL_PadTextureDims(int n) {
 	}
 	return n;
 }
-
-//
-// GL_ScaleTextureDims
-//
-
-float GL_ScaleTextureDims(int spritenum, int width, int height, int newwidth, int newheight) {
-	cursprite = spritenum; 
-	width = spritewidth[spritenum];
-	height = spriteheight[spritenum];
-	newwidth = spriteheight[spritenum];
-	newheight = spriteheight[spritenum];
-	if (newwidth)
-		newwidth = width;
-	if (newheight)
-		newheight = height;
-}
-
 
 //
 // GL_DumpTextures

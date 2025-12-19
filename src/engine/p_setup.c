@@ -88,6 +88,8 @@ extern int numclusterdef;
 extern clusterdef_t* clusterdefs;
 extern int numepisodedef;
 extern episodedef_t* episodedefs;
+extern float spritedef;
+extern spritescaledef_t* spritescaledef;
 
 //
 // [kex] cvars
@@ -1083,6 +1085,23 @@ int P_GetNumEpisodes(void)
 
 episodedef_t* P_GetEpisode(int episode) {
 	return &episodedefs[episode];
+}
+
+spritescaledef_t* P_GetSpriteScale(spritescaledef_t* sscale) {
+	float s;
+	s = sscale->spritescale;
+	if (s <= 0.25f) {
+		s = 0.25f;
+	}
+	else if (sscale->spritescale >= 1.0f) {
+		s = 1.0f;
+	}
+	else {
+		s = sscale->spritescale;
+	}
+
+	return sscale;
+
 }
 
 //

@@ -39,6 +39,8 @@ int P_GetNumEpisodes(void);
 void P_InitMapInfo(void);
 void P_ListMaps(void);
 
+spritescaledef_t* P_GetSpriteScale(float scale);
+
 // 
 void LOC_RegisterCvars(void);
 

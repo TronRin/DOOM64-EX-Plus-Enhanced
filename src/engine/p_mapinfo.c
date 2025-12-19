@@ -42,6 +42,8 @@ int numclusterdef;
 clusterdef_t* clusterdefs;
 int numepisodedef;
 episodedef_t* episodedefs;
+float spritedef;
+spritescaledef_t* spritescaledef;
 
 /* atsb: Everything below this is Clean C24 standard code.
 most is traditional UMAPINFO style parsing, nothing major
@@ -840,6 +842,56 @@ static void P_MapInfoLexerParseEpisodeBlock(mapinfo_lexer* mapinfo_lexer, int st
     dmemcpy(&episodedefs[numepisodedef - 1], &e, sizeof(e));
 }
 
+static void P_MapInfoLexerParseSpriteBlock(mapinfo_lexer* mapinfo_lexer, float spritescale) {
+	spritescaledef_t s;
+    dmemset(&s, 0, sizeof(s));
+	s.spritescale = spritescale;
+    for (;;) {
+        mapinfo_token mapinfo_sprite_value = P_MapInfoLexerNext(mapinfo_lexer);
+        if (mapinfo_sprite_value.kind == MI_RBRACE) break;
+        if (mapinfo_sprite_value.kind == MI_EOF) {
+            CON_Warnf("%s:%d:%d: unexpected EOF in sprite block\n", mapinfo_lexer->filename,
+                mapinfo_sprite_value.line, mapinfo_sprite_value.column);
+            break;
+        }
+        if (mapinfo_sprite_value.kind != MI_IDENT) {
+            CON_Warnf("%s:%d:%d: expected key in sprite block\n", mapinfo_lexer->filename,
+                mapinfo_sprite_value.line, mapinfo_sprite_value.column);
+            P_MapInfoLexerRightBrace(mapinfo_lexer);
+            break;
+        }
+
+        if (!dfcmp((float)mapinfo_sprite_value.mapinfo_integer_value, spritescale)) {
+            const char* v = P_MapInfoLexerParseFloatAfterEq(mapinfo_lexer, 0.25f);
+            if (sizeof(s.spritescale) == 1.0f) {
+                ((float*)&s.spritescale)[0] = (v && v[0]) ? (float)v[0] : 0;
+            }
+            else {
+                size_t cap = sizeof(s.spritescale);
+                size_t n = dflen(v);
+                if (cap) {
+                    if (n >= cap) n = cap - 1;
+                    dfcmpy(s.spritescale, v, n);
+                    s.spritescale = 0.25f;
+                }
+            }
+            continue;
+        }
+
+        CON_Warnf("%s:%d:%d: unknown sprite scale '%s' (skipping)\n", mapinfo_lexer->filename,
+            mapinfo_sprite_value.line, mapinfo_sprite_value.column, mapinfo_sprite_value.mapinfo_string_value);
+        if (P_MapInfoLexerAccept(mapinfo_lexer, MI_EQUALS)) {
+            mapinfo_token mapinfo_sprite_value_long = P_MapInfoLexerPeekLong(mapinfo_lexer);
+            if (mapinfo_sprite_value_long.kind == MI_STRING || mapinfo_sprite_value_long.kind == MI_NUMBER || mapinfo_sprite_value_long.kind == MI_IDENT)
+                P_MapInfoLexerNext(mapinfo_lexer);
+
+            else if (mapinfo_sprite_value_long.kind == MI_LBRACE) P_MapInfoLexerRightBrace(mapinfo_lexer);
+        }
+    }
+    //spritedef = Z_Free(spritedef, sizeof(spritedef_t) * ++spritedef, PU_STATIC, 0);
+    //dme((spritedef, &s, sizeof(s));
+}
+
 static void P_MapInfoLexerParseTop(mapinfo_lexer* mapinfo_lexer) {
     for (;;) {
         mapinfo_token t = P_MapInfoLexerPeekLong(mapinfo_lexer);
@@ -903,6 +955,7 @@ void P_InitMapInfo(void) {
     mapdefs = NULL;
     clusterdefs = NULL;
     episodedefs = NULL;
+	spritedef = 1.0f;
     nummapdef = 0;
     numclusterdef = 0;
     numepisodedef = 0;
@@ -929,4 +982,5 @@ void P_InitMapInfo(void) {
     CON_DPrintf("%i map definitions\n", nummapdef);
     CON_DPrintf("%i cluster definitions\n", numclusterdef);
     CON_DPrintf("%i episode definitions\n", numepisodedef);
+	CON_DPrintf("%i sprite definitions\n", spritedef);
 }

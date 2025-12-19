@@ -191,6 +191,11 @@ typedef struct
 	char       key;
 } episodedef_t;
 
+typedef struct {
+
+	float		spritescale;    // global sprite scale factor
+} spritescaledef_t;
+
 //-----------------------------
 // Internal parameters, fixed.
 // These are set by the engine, and not changed

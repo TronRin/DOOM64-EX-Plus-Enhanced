@@ -827,6 +827,7 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 
 	spritedef_t* sprdef;
 	spriteframe_t* sprframe;
+	spritescaledef_t* sprscale;
 	int             spritenum;
 	int             flip;
 	rcolor          color;

@@ -361,7 +361,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 
 	}
 
-void AM_DrawSprite(mobj_t* thing, float scale, float spritescale) {
+void AM_DrawSprite(mobj_t* thing, float scale, spritescaledef_t* spritescale) {
 	spritedef_t* sprdef;
 	spriteframe_t* sprframe;
 	fixed_t x;

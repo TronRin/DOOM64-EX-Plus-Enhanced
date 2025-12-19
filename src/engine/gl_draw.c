@@ -122,6 +122,8 @@ void Draw_GfxImageTitle(int x, int y, const char* name, rcolor color, boolean al
 
 void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	float scale, int pal, rcolor c) {
+	float spritescale = 1.0f;
+	spritescaledef_t* sscale = &spritescale;
 	spritedef_t* sprdef;
 	spriteframe_t* sprframe;
 	float flip = 0.0f;
@@ -129,12 +131,14 @@ void Draw_Sprite2D(int type, int rot, int frame, int x, int y,
 	int h;
 	int offsetx = 0;
 	int offsety = 0;
+    // Initialize sscale before use to fix C4700
+    spritescaledef_t sscale_struct;
+
 
 	GL_SetState(GLSTATE_BLEND, 1);
 
 	sprdef = &spriteinfo[type];
 	sprframe = &sprdef->spriteframes[frame];
-
 	GL_BindSpriteTexture(sprframe->lump[rot], pal);
 
 	w = spritewidth[sprframe->lump[rot]];
