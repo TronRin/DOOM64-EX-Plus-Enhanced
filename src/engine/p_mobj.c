@@ -1229,7 +1229,6 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		mobj->spawnpoint = *mthing;
 	}
 
-	return mobj;
 }
 
 //

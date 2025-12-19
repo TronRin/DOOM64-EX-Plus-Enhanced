@@ -650,6 +650,7 @@ static void InitSpriteTextures(void) {
 	int p = 0;
 	int palcnt = 0;
 	int offset[2];
+	
 
 	s_start = W_GetNumForName("S_START") + 1;
 	s_end = W_GetNumForName("S_END") - 1;
@@ -796,6 +797,21 @@ void GL_BindSpriteTexture(int spritenum, int pal) {
 
 	spritewidth[spritenum] = w;
 	spriteheight[spritenum] = h;
+	if (spritewidth[spritenum] >= 256 && spriteheight[spritenum] >= 256)
+		{
+			float sprite_scale = 0.30f;
+			spritewidth[spritenum] = w * (float)sprite_scale;
+			spriteheight[spritenum] = h * (float)sprite_scale;
+			I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+			I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+			I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
+		}
+	else
+	{
+		spritewidth[spritenum] = w;
+		spriteheight[spritenum] = h;
+	}
+
 	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
 	I_SectorCombiner_Bind(1, spritewidth[spritenum], spriteheight[spritenum]);
@@ -1189,6 +1205,23 @@ int GL_PadTextureDims(int n) {
 	}
 	return n;
 }
+
+//
+// GL_ScaleTextureDims
+//
+
+float GL_ScaleTextureDims(int spritenum, int width, int height, int newwidth, int newheight) {
+	cursprite = spritenum; 
+	width = spritewidth[spritenum];
+	height = spriteheight[spritenum];
+	newwidth = spriteheight[spritenum];
+	newheight = spriteheight[spritenum];
+	if (newwidth)
+		newwidth = width;
+	if (newheight)
+		newheight = height;
+}
+
 
 //
 // GL_DumpTextures

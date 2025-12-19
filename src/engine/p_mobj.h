@@ -125,7 +125,8 @@ typedef enum {
 	MF_RENDERLASER = 0x10000000,   // [d64] Exclusive to MT_LASERMARKER only
 	MF_TRIGDEATH = 0x20000000,   // [d64] Trigger line special on death
 	MF_SHADOW = 0x40000000,   // temporary player invisibility powerup.
-    MF_NOINFIGHTING = 0x80000000    // [d64] Do not switch targets
+    MF_NOINFIGHTING = 0x80000000,    // [d64] Do not switch targets
+	MF_SPRITESCALE = 0x160000000 // [kex] Use custom sprite scaling
 } mobjflag_t;
 
 typedef enum {
@@ -195,7 +196,7 @@ typedef struct mobj_s {
     // [kex] flags for mobj collision
     mobjblockflag_t     blockflag;
 
-    // Movement direction, movement generation (zig-zagging).
+    // M ment direction, movement generation (zig-zagging).
     int                 movedir;    // 0-7
     int                 movecount;    // when 0, select a new dir
 
@@ -238,6 +239,10 @@ typedef struct mobj_s {
 
     // [kex] mobj reference id
     unsigned int        refcount;
+
+    // [kex] custom sprite scaling factor
+	float 		   spritescale; 
+   
 
 } mobj_t;
 

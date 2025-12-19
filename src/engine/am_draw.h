@@ -35,6 +35,6 @@ void AM_EndDraw(void);
 void AM_DrawLeafs(float scale);
 void AM_DrawLine(int x1, int x2, int y1, int y2, float scale, rcolor c);
 void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, byte b);
-void AM_DrawSprite(mobj_t* thing, float scale);
+void AM_DrawSprite(mobj_t* thing, float scale, float spritescale);
 
 #endif

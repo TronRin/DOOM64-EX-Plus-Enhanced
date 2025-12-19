@@ -361,11 +361,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 
 	}
 
-//
-// AM_DrawSprite
-//
-
-void AM_DrawSprite(mobj_t* thing, float scale) {
+void AM_DrawSprite(mobj_t* thing, float scale, float spritescale) {
 	spritedef_t* sprdef;
 	spriteframe_t* sprframe;
 	fixed_t x;
@@ -417,6 +413,9 @@ void AM_DrawSprite(mobj_t* thing, float scale) {
 
 			if (scalefactor >= 5.0f) {
 				scalefactor = 5.0f;
+			}
+		if (thing->type == MT_OVELIA) {
+			scalefactor = 6000.0f;
 			}
 		}
 		else {

@@ -117,6 +117,7 @@ typedef enum {
 #define MTF_NONETGAME       2048   // Don't spawn in standard netgame mode
 #define MTF_NIGHTMARE       4096   // [kex] Nightmare thing
 #define MTF_DROPOFF         16384  // This allows jumps from high places.
+#define MTF_SPRITESCALE		32768  // Enable sprite scaling for this thing
 
 typedef enum {
 	sk_baby,

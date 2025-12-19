@@ -1667,6 +1667,11 @@ int P_DoSpecialLine(mobj_t* thing, line_t* line, int side) {
 		ok = EV_DoFloor(line, lower16AboveSlow, FLOORSPEED * 0.5);
 		break;
 
+	case 47:
+		// Spritescale flag toggle
+		ok = P_ModifyMobjFlags(line->tag, MF_SPRITESCALE);
+		break;
+
 	default:
 		CON_Warnf("P_DoSpecialLine: Unknown Special: %i\n", line->special);
 		return 0;

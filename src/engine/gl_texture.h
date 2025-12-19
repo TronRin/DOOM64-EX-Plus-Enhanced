@@ -82,4 +82,5 @@ int			GL_GetGfxIdForLump(int lump);
 void		GL_Env_RGB_Modulate_Alpha_FromTexture(void);
 void		I_ShaderBind(void);
 void		I_ShaderUnBind(void);
+float		GL_ScaleTextureDims(int spritenum, int width, int h, int *newwidth, int *newheight);
 #endif

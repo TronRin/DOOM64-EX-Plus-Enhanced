@@ -881,7 +881,7 @@ static void AM_drawPlayers(void) {
 static void AM_drawThings(void) {
 	int     i;
 	mobj_t* t;
-
+	float spritescale = 0.40f;
 	for (i = 0; i < numsectors; i++) {
 		t = sectors[i].thinglist;
 
@@ -927,7 +927,7 @@ static void AM_drawThings(void) {
 				}
 
 				if (am_drawobjects.value) {
-					AM_DrawSprite(t, scale);
+					AM_DrawSprite(t, scale, spritescale);
 				}
 			}
 			//
@@ -986,7 +986,7 @@ static void AM_drawThings(void) {
 					}
 
 					if (am_drawobjects.value) {
-						AM_DrawSprite(t, scale);
+						AM_DrawSprite(t, scale, spritescale);
 					}
 				}
 			}

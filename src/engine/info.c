@@ -56,7 +56,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SPID", "VFIR", "VILE", "TEST", "BLUG", "BLUP", "SH1R", "SH2R",
 	"PUNR", "POS1", "POS2", "SAR1", "SAR2", "TRO1", "TRO2", "TROM",
 	"BOS1", "BOS2", "GECH", "A64A", "SAR3", "HEA2", "NCAC", "PAI2",
-	 NULL
+	"OIDL", NULL
 };
 
 // Doesn't work with g++, needs actionf_p1
@@ -1660,6 +1660,46 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NCBALL_DIE3*/{ SPR_NCAC, 32773, 2, {NULL}, S_NCBALL_DIE4 },
 	/*S_NCBALL_DIE4*/{ SPR_NCAC, 32774, 2, {NULL}, S_NCBALL_DIE5 },
 	/*S_NCBALL_DIE5*/{ SPR_NCAC, 32775, 2, {NULL}, S_NULL },
+
+	// OVELIA
+	/*S_OIDL_STND*/{ SPR_OIDL, 0, 10, {A_Look}, S_OIDL_STND2 },
+	/*S_OIDL_STND2*/{ SPR_OIDL, 1, 10, {A_Look}, S_OIDL_STND },
+	/*S_OIDL_RUN1*/{ SPR_OIDL, 0, 2, {A_Chase}, S_OIDL_RUN2 },
+	/*S_OIDL_RUN2*/{ SPR_OIDL, 0, 2, {A_Chase}, S_OIDL_RUN3 },
+	/*S_OIDL_RUN3*/{ SPR_OIDL, 1, 2, {A_Chase}, S_OIDL_RUN4 },
+	/*S_OIDL_RUN4*/{ SPR_OIDL, 1, 2, {A_Chase}, S_OIDL_RUN5 },
+	/*S_OIDL_RUN5*/{ SPR_OIDL, 2, 2, {A_Chase}, S_OIDL_RUN6 },
+	/*S_OIDL_RUN6*/{ SPR_OIDL, 2, 2, {A_Chase}, S_OIDL_RUN7 },
+	/*S_OIDL_RUN7*/{ SPR_OIDL, 3, 2, {A_Chase}, S_OIDL_RUN8 },
+	/*S_OIDL_RUN8*/{ SPR_OIDL, 3, 2, {A_Chase}, S_OIDL_RUN9 },
+	/*S_OIDL_RUN9*/{ SPR_OIDL, 4, 2, {A_Chase}, S_OIDL_RUN10 },
+	/*S_OIDL_RUN10*/{ SPR_OIDL, 4, 2, {A_Chase}, S_OIDL_RUN11 },
+	/*S_OIDL_RUN11*/{ SPR_OIDL, 5, 2, {A_Chase}, S_OIDL_RUN12 },
+	/*S_OIDL_RUN12*/{ SPR_OIDL, 5, 2, {A_Chase}, S_OIDL_RUN1 },
+	/*S_OIDL_FIST1*/{ SPR_OIDL, 6, 0, {A_FaceTarget}, S_OIDL_FIST2 },
+	/*S_OIDL_FIST2*/{ SPR_OIDL, 6, 6, {A_SkelWhoosh}, S_OIDL_FIST3 },
+	/*S_OIDL_FIST3*/{ SPR_OIDL, 7, 6, {A_FaceTarget}, S_OIDL_FIST4 },
+	/*S_OIDL_FIST4*/{ SPR_OIDL, 8, 6, {A_SkelFist}, S_OIDL_RUN1 },
+	/*S_OIDL_MISS1*/{ SPR_OIDL, 32777, 0, {A_FaceTarget}, S_OIDL_MISS2 },
+	/*S_OIDL_MISS2*/{ SPR_OIDL, 32777, 10, {A_FaceTarget}, S_OIDL_MISS3 },
+	/*S_OIDL_MISS3*/{ SPR_OIDL, 10, 10, {A_SkelAttack}, S_OIDL_MISS4 },
+	/*S_OIDL_MISS4*/{ SPR_OIDL, 10, 10, {A_FaceTarget}, S_OIDL_RUN1 },
+	/*S_OIDL_PAIN*/{ SPR_OIDL, 11, 4, {NULL}, S_OIDL_PAIN2 },
+	/*S_OIDL_PAIN2*/{ SPR_OIDL, 11, 4, {A_Pain}, S_OIDL_RUN1 },
+	/*S_OIDL_DIE1*/{ SPR_OIDL, 11, 6, {NULL}, S_OIDL_DIE2 },
+	/*S_OIDL_DIE2*/{ SPR_OIDL, 12, 6, {NULL}, S_OIDL_DIE3 },
+	/*S_OIDL_DIE3*/{ SPR_OIDL, 12, 6, {A_Scream}, S_OIDL_DIE4 },
+	/*S_OIDL_DIE4*/{ SPR_OIDL, 14, 6, {A_Fall}, S_OIDL_DIE5 },
+	/*S_OIDL_DIE5*/{ SPR_OIDL, 11, 6, {A_OnDeathTrigger}, S_OIDL_DIE6 },
+	/*S_OIDL_DIE6*/{ SPR_OIDL, 12, -1, {NULL}, S_NULL },
+	/*S_OIDL_RAISE1*/{ SPR_OIDL, 10, 6, {NULL}, S_OIDL_RAISE2 },
+	/*S_OIDL_RAISE2*/{ SPR_OIDL, 10, 6, {NULL}, S_OIDL_RAISE3 },
+	/*S_OIDL_RAISE3*/{ SPR_OIDL, 10, 6, {NULL}, S_OIDL_RAISE4 },
+	/*S_OIDL_RAISE4*/{ SPR_OIDL, 11, 6, {NULL}, S_OIDL_RAISE5 },
+	/*S_OIDL_RAISE5*/{ SPR_OIDL, 10, 6, {NULL}, S_OIDL_RAISE6 },
+	/*S_OIDL_RAISE6*/{ SPR_OIDL, 11, 6, {NULL}, S_OIDL_RUN1 },
+
+
 	
 };
 
@@ -5347,9 +5387,9 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		255        //alpha
 	},
 
-{// MT_MISC2
-10000,// doomednum
-S_ALPHALAMP1,// spawnstate
+{ // MT_MISC2
+10001,// doomednum
+S_ALPHALAMP2,// spawnstate
 1000,// spawnhealth
 S_NULL,// seestate
 sfx_None,// seesound
@@ -5365,7 +5405,7 @@ S_NULL,// xdeathstate
 sfx_None,// deathsound
 0,// speed
 20 * FRACUNIT,// radius
-47 * FRACUNIT,// height
+12 * FRACUNIT,// height
 100,// mass
 0,// damage
 sfx_None,// activesound
@@ -6818,5 +6858,33 @@ MF_SOLID,// flags
 		MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
 		0,        //palette
 		100        //alpha
+	},
+	{
+		/*MT_OVELIA*/
+		131,        // doomednum
+		S_OIDL_STND,        // spawnstate
+		300,        // spawnhealth
+		S_OIDL_RUN1,        // seestate
+		sfx_skelsit,        // seesound
+		8,        // reactiontime
+		sfx_None,        // attacksound
+		S_OIDL_PAIN,        // painstate
+		100,        // painchance
+		sfx_dbpain1,        // painsound
+		S_OIDL_FIST1,        // meleestate
+		S_OIDL_MISS1,        // missilestate
+		S_OIDL_DIE1,        // deathstate
+		S_NULL,        // xdeathstate
+		sfx_skeldth,        // deathsound
+		10,        // speed
+		32 * FRACUNIT,        // radius
+		120 * FRACUNIT,        // height
+		500,        // mass
+		0,        // damage
+		sfx_skelact,        // activesound
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        // flags
+		0,        // palette
+		255,        //alpha
+		S_OIDL_RAISE1        //raisestate
 	},
 };
